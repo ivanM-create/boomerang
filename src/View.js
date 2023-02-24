@@ -1,14 +1,16 @@
+/* eslint-disable no-console */
+/* eslint-disable class-methods-use-this */
 // Сделаем отдельный класс для отображения игры в консоли.
 
 class View {
-  render() {
-    const yourTeamName = 'Elbrus';
-
-    // Тут всё рисуем.
+  render(track) {
     console.clear();
-    console.log(this.game.track.join(''));
-    console.log('\n\n');
-    console.log(`Created by "${yourTeamName}" with love`);
+    console.log();
+    console.log('🏡 🏔 🏠 🏔 🏘 🏔 🏡 🏔 🏡 🏔 🏘 🏔 🏠 🎡 🎠 🌲 🌳 🌲');
+    console.log('\n');
+    console.log(track.join(''));
+    console.log('\n');
+    console.log('🏡 🏔 🏠 🏔 🏘 🏔 🏡 🏔 🏡 🏔 🏘 🏔 🏠 🎡 🎠 🌲 🌳 🌲');
   }
 }
 

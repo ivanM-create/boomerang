@@ -1,11 +1,11 @@
-// Импортируем всё необходимое.
-// Или можно не импортировать,
-// а передавать все нужные объекты прямо из run.js при инициализации new Game().
-
+/* eslint-disable class-methods-use-this */
+/* eslint-disable prefer-arrow-callback */
+const player = require('play-sound')({});
 const Hero = require('./game-models/Hero');
 const Enemy = require('./game-models/Enemy');
-// const Boomerang = require('./game-models/Boomerang');
 const View = require('./View');
+const Boomerang = require('./game-models/Boomerang');
+const runInteractiveConsole = require('./keyboard');
 
 // Основной класс игры.
 // Тут будут все настройки, проверки, запуск.
@@ -13,33 +13,77 @@ const View = require('./View');
 class Game {
   constructor({ trackLength }) {
     this.trackLength = trackLength;
-    this.hero = new Hero(); // Герою можно аргументом передать бумеранг.
+    this.hero = new Hero();
     this.enemy = new Enemy();
+    this.boomerang = new Boomerang();
     this.view = new View();
     this.track = [];
     this.regenerateTrack();
   }
 
   regenerateTrack() {
-    // Сборка всего необходимого (герой, враг(и), оружие)
-    // в единую структуру данных
-    this.track = (new Array(this.trackLength)).fill(' ');
+    this.track = new Array(this.trackLength).fill(' ');
     this.track[this.hero.position] = this.hero.skin;
+    this.track[this.boomerang.position] = this.boomerang.skin;
+    this.track[this.enemy.position] = this.enemy.skin;
   }
 
-  check() {
+  check(countOfEnemies) {
     if (this.hero.position === this.enemy.position) {
-      this.hero.die();
+      this.audioGame.kill();
+      this.musicPlayDied();
+      this.hero.die(countOfEnemies);
     }
   }
 
-  play() {
-    setInterval(() => {
-      // Let's play!
-      this.check();
+  musicPlayGame() {
+    this.audioGame = player.play(
+      `${__dirname}/sounds/game.mp3`,
+      function (err) {
+        if (err && !err.killed) throw err;
+      }
+    );
+  }
+
+  musicPlayDied() {
+    player.play(`${__dirname}/sounds/died.mp3`, function (err) {
+      if (err) throw err;
+    });
+  }
+
+  async play() {
+    runInteractiveConsole(this.hero, this.boomerang);
+    let count = 0;
+    let countOfEnemies = 0;
+    this.musicPlayGame();
+    const int = await setInterval(() => {
+      this.check(countOfEnemies);
       this.regenerateTrack();
       this.view.render(this.track);
-    });
+      if (
+        this.boomerang.position === this.enemy.position ||
+        this.boomerang.position === this.enemy.position - 1 ||
+        this.boomerang.position - 1 === this.enemy.position
+      ) {
+        countOfEnemies += 1;
+        console.log(`Убито врагов: ${countOfEnemies}`);
+        this.enemy.die();
+        this.enemy = new Enemy();
+        this.boomerang.position = '?';
+        this.boomerang = new Boomerang();
+        runInteractiveConsole(this.hero, this.boomerang);
+      }
+      this.enemy.moveLeft();
+      count += 1;
+      if (count === 200) {
+        clearInterval(int);
+        this.musicPlayDied();
+        console.log('Время вышло!');
+        console.log(`Убито врагов: ${countOfEnemies}`);
+        process.exit();
+      }
+    }, 200);
+    return countOfEnemies;
   }
 }
 
