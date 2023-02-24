@@ -18,7 +18,7 @@ const { User } = require('./db/models');
 const game = new Game({
   trackLength: 40,
 });
-//
+
 // Запуск игры.
 console.clear();
 const nameOfUser = process.argv[2];
