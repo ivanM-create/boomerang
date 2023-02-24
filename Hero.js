@@ -1,8 +1,6 @@
-// Наш герой.
-
 class Hero {
   constructor() {
-    this.skin = '🥷';
+    this.skin = '👉';
     this.position = 0;
   }
 
@@ -23,10 +21,8 @@ class Hero {
 
   // eslint-disable-next-line class-methods-use-this
   die(countOfEnemies) {
-    console.log('Ты проиграл! 😵');
+    console.log('GAME OVER ❌');
     console.log(`Убито врагов: ${countOfEnemies}`);
     process.exit();
   }
 }
-
-module.exports = Hero;
