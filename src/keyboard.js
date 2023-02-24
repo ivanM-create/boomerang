@@ -1,40 +1,25 @@
-// Умеешь работать с keypress? Попробуй разобраться в этом файле.
-// Вместо keypress можно использовать и стандартный readline.
-// Главное не используй всё вместе!
-
+/* eslint-disable no-param-reassign */
 const keypress = require('keypress');
 
-// Управление.
-// Настроим соответствия нажатий на клавиши и действий в игре.
-
-const keyboard = {
-  q: () => console.log('q'),
-  w: () => console.log('w'),
-  e: () => console.log('e'),
-  r: () => console.log('r'),
-  t: () => console.log('t'),
-  y: () => console.log('y'),
-};
-
-// Какая-то функция.
-
-function runInteractiveConsole() {
+module.exports = function runInteractiveConsole(hero, boomerang) {
   keypress(process.stdin);
   process.stdin.on('keypress', (ch, key) => {
     if (key) {
       // Вызывает команду, соответствующую нажатой кнопке.
-      if (key.name in keyboard) {
-        keyboard[key.name]();
+      if (key.name === 'd') {
+        hero.position += 1;
       }
-      // Прерывание программы.
+      if (key.name === 'a') {
+        hero.position -= 1;
+      }
+      if (key.name === 'q') {
+        boomerang.position = hero.position + 1;
+        setInterval(() => boomerang.fly(hero), 15);
+      }
       if (key.ctrl && key.name === 'c') {
         process.exit();
       }
     }
   });
   process.stdin.setRawMode(true);
-}
-
-// Давай попробуем запустить этот скрипт!
-
-runInteractiveConsole();
+};

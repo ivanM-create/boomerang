@@ -1,9 +1,9 @@
 // Наш герой.
 
 class Hero {
-  constructor({ position }) {
-    this.skin = '🤠'; // можете использовать любые emoji '💃'
-    this.position = position;
+  constructor() {
+    this.skin = '🥷';
+    this.position = 0;
   }
 
   moveLeft() {
@@ -21,9 +21,10 @@ class Hero {
     this.boomerang.fly();
   }
 
-  die() {
-    this.skin = '💀';
-    console.log('YOU ARE DEAD!💀');
+  // eslint-disable-next-line class-methods-use-this
+  die(countOfEnemies) {
+    console.log('Ты проиграл! 😵');
+    console.log(`Убито врагов: ${countOfEnemies}`);
     process.exit();
   }
 }
