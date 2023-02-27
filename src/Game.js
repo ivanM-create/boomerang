@@ -10,6 +10,7 @@ const Enemy = require('./game-models/Enemy');
 const View = require('./View');
 const Boomerang = require('./game-models/Boomerang');
 const runInteractiveConsole = require('./keyboard');
+const { User } = require('../db/models');
 
 // Основной класс игры.
 // Тут будут все настройки, проверки, запуск.
@@ -24,6 +25,7 @@ class Game {
     this.track = [];
     this.track1 = [];
     this.regenerateTrack();
+    this.count = 0;
   }
 
   regenerateTrack() {
@@ -34,10 +36,13 @@ class Game {
   }
 
   check(countOfEnemies) {
-    if (this.hero.position === this.enemy.position) {
+    if (this.hero.position === this.enemy.position - 1) {
       this.audioGame.kill();
       this.musicPlayDied();
       this.hero.die(countOfEnemies);
+    }
+    if (this.boomerang.position >= this.enemy.position - 1) {
+      this.count += 10;
     }
   }
 
@@ -46,7 +51,7 @@ class Game {
       `${__dirname}/sounds/background.mp3`,
       function (err) {
         if (err && !err.killed) throw err;
-      }
+      },
     );
   }
 
@@ -57,6 +62,7 @@ class Game {
   }
 
   async play() {
+    const name = process.argv[2];
     runInteractiveConsole(this.hero, this.boomerang);
     let count = 0;
     let countOfEnemies = 0;
@@ -64,11 +70,11 @@ class Game {
     const int = await setInterval(() => {
       this.check(countOfEnemies);
       this.regenerateTrack();
-      this.view.render(this.track);
+      this.view.render(this.track, this.count, name);
       if (
-        this.boomerang.position === this.enemy.position ||
-        this.boomerang.position === this.enemy.position - 1 ||
-        this.boomerang.position - 1 === this.enemy.position
+        this.boomerang.position === this.enemy.position
+        || this.boomerang.position === this.enemy.position - 1
+        || this.boomerang.position - 1 === this.enemy.position
       ) {
         countOfEnemies += 1;
         console.log(`Ты успел срубить: ${countOfEnemies} деревьев`);
