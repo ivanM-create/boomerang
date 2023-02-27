@@ -1,6 +1,6 @@
 class Boomerang {
   constructor() {
-    this.skin = '🦯';
+    this.skin = '🦫';
     this.position = -1;
   }
 
@@ -24,7 +24,7 @@ class Boomerang {
   }
 
   moveRight() {
-    // Идём вправо.
+    // Идём вправо..
     this.position += 1;
   }
 }

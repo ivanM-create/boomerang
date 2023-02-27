@@ -1,3 +1,7 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-console */
+/* eslint-disable func-names */
+/* eslint-disable comma-dangle */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable prefer-arrow-callback */
 const player = require('play-sound')({});
@@ -19,6 +23,7 @@ class Game {
     this.boomerang = new Boomerang();
     this.view = new View();
     this.track = [];
+    this.track1 = [];
     this.regenerateTrack();
     this.count = 0;
   }
@@ -43,7 +48,7 @@ class Game {
 
   musicPlayGame() {
     this.audioGame = player.play(
-      `${__dirname}/sounds/game.mp3`,
+      `${__dirname}/sounds/background.mp3`,
       function (err) {
         if (err && !err.killed) throw err;
       },
@@ -51,7 +56,7 @@ class Game {
   }
 
   musicPlayDied() {
-    player.play(`${__dirname}/sounds/died.mp3`, function (err) {
+    player.play(`${__dirname}/sounds/msmert.mp3`, function (err) {
       if (err) throw err;
     });
   }
@@ -72,8 +77,7 @@ class Game {
         || this.boomerang.position - 1 === this.enemy.position
       ) {
         countOfEnemies += 1;
-
-        console.log(`Убито врагов: ${countOfEnemies}`);
+        console.log(`Ты успел срубить: ${countOfEnemies} деревьев`);
         this.enemy.die();
         this.enemy = new Enemy();
         this.boomerang.position = '?';
@@ -86,7 +90,7 @@ class Game {
         clearInterval(int);
         this.musicPlayDied();
         console.log('Время вышло!');
-        console.log(`Убито врагов: ${countOfEnemies}`);
+        console.log(`Срубленно: ${countOfEnemies} деревьев`);
         process.exit();
       }
     }, 200);

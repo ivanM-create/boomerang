@@ -1,8 +1,3 @@
-// // Основной файл.
-// // Запускает игру.
-// const Game = require('./src/Game');
-
-// const { User, sequelize } = require("./models/user");
 
 /* eslint-disable no-console */
 const Game = require('./src/Game');
