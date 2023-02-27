@@ -4,12 +4,12 @@
 
 class Boomerang {
   constructor() {
-    this.skin = '🦯';
+    this.skin = '🪓';
     this.position = -1;
   }
 
   fly(hero) {
-    if (this.position < hero.position + 5) {
+    if (this.position < hero.position + 10) {
       this.moveRight();
     } else {
       this.moveLeft();

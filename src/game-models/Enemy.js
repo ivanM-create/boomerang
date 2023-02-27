@@ -1,7 +1,7 @@
 // Враг.
 
 class Enemy {
-  constructor(skins = ['🐜', '🦇', '🦖', '💩', '🦅', '🐛', '🦤']) {
+  constructor(skins = ['🌲', '🌴', '🌳', '🌵']) {
     this.skin = skins[Math.floor(Math.random() * skins.length)];
     this.position = 39;
   }
